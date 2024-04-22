@@ -1,12 +1,12 @@
 {
     "name": "jmrashed/zkteco",
-    "description": "ZKTeco Laravel Library",
+    "description": "ZKTeco SDK Laravel Package",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Raihan Afroz",
-            "email": "raihanafroz9@gmail.com"
+            "name": "Md Rasheduzzaman",
+            "email": "jmrashed@gmail.com"
         }
     ],
     "autoload": {
@@ -15,5 +15,8 @@
       }
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^10.0"
+    }
 }
