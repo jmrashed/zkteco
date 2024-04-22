@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>ZKTeco SDK - Laravel Most Trustable Library</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="zkteco-sdk---laravel-most-trustable-library">ZKTeco SDK - Laravel Most Trustable Library</h1>
+<p><a href="https://github.com/jmrashed/zkteco/stargazers"><img src="https://img.shields.io/github/stars/jmrashed/zkteco?style=flat-square" alt="Stars"></a>
+<a href="https://packagist.org/packages/jmrashed/zkteco"><img src="https://img.shields.io/packagist/dt/jmrashed/zkteco?style=flat-square" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/jmrashed/zkteco"><img src="https://poser.pugx.org/jmrashed/zkteco/license.svg" alt="License"></a></p>
+<p>The <code>jmrashed/zkteco</code> package provides easy to use functions to ZKTeco Device activities.</p>
+<p><strong>Requires:</strong>  <strong>Laravel</strong> &gt;= <strong>6.0</strong></p>
+<p><strong>License:</strong> MIT or later</p>
+<h2 id="installation">Installation:</h2>
+<p>You can install the package via composer:</p>
+<pre><code class="language-bash">composer require jmrashed/zkteco
+</code></pre>
+<h1 id="enabling-php-sockets">Enabling PHP Sockets</h1>
+<p>This guide outlines the steps to enable PHP sockets on your server. Sockets are essential for establishing communication channels between different processes or computers over a network.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>PHP installed on your server</li>
+<li>Access to the <code>php.ini</code> configuration file</li>
+<li>Basic knowledge of server administration</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol>
+<li>
+<p><strong>Check PHP Installation</strong>: Verify that PHP is installed on your server by running <code>php -v</code> in your terminal or command prompt.</p>
+</li>
+<li>
+<p><strong>Enable Sockets Extension</strong>: Edit the <code>php.ini</code> file to enable the sockets extension. Find the following line:</p>
+<pre><code>;extension=sockets
+</code></pre>
+<p>Remove the semicolon at the beginning of the line to uncomment it:</p>
+<pre><code>extension=sockets
+</code></pre>
+</li>
+<li>
+<p><strong>Restart Web Server</strong>: After editing <code>php.ini</code>, restart your web server to apply the changes. Use the appropriate command based on your server software (e.g., Apache, Nginx).</p>
+</li>
+<li>
+<p><strong>Verify Installation</strong>: Create a PHP file (e.g., <code>test.php</code>) with the following contents:</p>
+<pre><code class="language-php"><span class="hljs-meta">&lt;?php</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">function_exists</span>(<span class="hljs-string">&#x27;socket_create&#x27;</span>)) {
+    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Sockets extension is enabled.&quot;</span>;
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Sockets extension is not enabled.&quot;</span>;
+}
+</code></pre>
+<p>Access this file through your web browser to verify that the sockets extension is enabled.</p>
+</li>
+<li>
+<p><strong>Firewall Configuration (if necessary)</strong>: If you're using a firewall, ensure it allows connections on the socket port (default: 80).</p>
+</li>
+<li>
+<p><strong>Test Socket Communication</strong>: Implement socket communication logic in your PHP scripts to test the functionality. See the provided PHP example for creating a socket connection.</p>
+</li>
+</ol>
+<h2 id="example-usage">Example Usage</h2>
+<p>Include the steps outlined in this guide in your server setup documentation to ensure proper configuration and enable PHP sockets for your applications.</p>
+<h2 id="support">Support</h2>
+<p>For further assistance or troubleshooting, feel free to reach out to our support team.</p>
+<h2 id="usage">Usage</h2>
+<ol>
+<li>Create a object of ZKTeco class.</li>
+</ol>
+<pre><code class="language-php">    <span class="hljs-keyword">use</span> <span class="hljs-title">Jmrashed</span>\<span class="hljs-title">Zkteco</span>\<span class="hljs-title">Lib</span>\<span class="hljs-title">ZKTeco</span>;
+
+<span class="hljs-comment">//  1 s&#x27;t parameter is string $ip Device IP Address</span>
+<span class="hljs-comment">//  2 nd  parameter is integer $port Default: 4370</span>
+  
+    <span class="hljs-variable">$zk</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ZKTeco</span>(<span class="hljs-string">&#x27;192.168.1.201&#x27;</span>);
+    
+<span class="hljs-comment">//  or you can use with port</span>
+<span class="hljs-comment">//    $zk = new ZKTeco(&#x27;192.168.1.201&#x27;, 8080);</span>
+    
+</code></pre>
+<ol start="2">
+<li>Call ZKTeco methods</li>
+</ol>
+<ul>
+<li><strong>Connect</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    connect</span>
+<span class="hljs-comment">//    this return bool</span>
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">connect</span>();   
+</code></pre>
+<ul>
+<li><strong>Disconnect</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    disconnect</span>
+<span class="hljs-comment">//    this return bool</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">disconnect</span>();   
+</code></pre>
+<ul>
+<li><strong>Enable Device</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    enable</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">enableDevice</span>();   
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong>: You have to call after read/write any info of Device.</p>
+</blockquote>
+<ul>
+<li><strong>Disable Device</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    disable </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">disableDevice</span>(); 
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong>: You have to call before read/write any info of Device.</p>
+</blockquote>
+<ul>
+<li><strong>Device Version</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get device version </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">version</span>(); 
+</code></pre>
+<ul>
+<li><strong>Device Os Version</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get device os version </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">osVersion</span>(); 
+</code></pre>
+<ul>
+<li><strong>Power Off</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    turn off the device </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">shutdown</span>(); 
+</code></pre>
+<ul>
+<li><strong>Restart</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    restart the device </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">restart</span>(); 
+</code></pre>
+<ul>
+<li><strong>Sleep</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    sleep the device </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">sleep</span>(); 
+</code></pre>
+<ul>
+<li><strong>Resume</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    resume the device from sleep </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">resume</span>(); 
+</code></pre>
+<ul>
+<li><strong>Voice Test</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    voice test of the device &quot;Thank you&quot; </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">testVoice</span>(); 
+</code></pre>
+<ul>
+<li><strong>Platform</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get platform </span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">platform</span>(); 
+</code></pre>
+<ul>
+<li><strong>Firmware Version</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get firmware version</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">fmVersion</span>(); 
+</code></pre>
+<ul>
+<li><strong>Work Code</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get work code</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">workCode</span>(); 
+</code></pre>
+<ul>
+<li><strong>SSR</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get SSR</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">ssr</span>(); 
+</code></pre>
+<ul>
+<li><strong>Pin Width</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get  Pin Width</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">pinWidth</span>(); 
+</code></pre>
+<ul>
+<li><strong>Serial Number</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get device serial number</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">serialNumber</span>(); 
+</code></pre>
+<ul>
+<li><strong>Device Name</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get device name</span>
+<span class="hljs-comment">//    this return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">deviceName</span>(); 
+</code></pre>
+<ul>
+<li><strong>Get Device Time</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get device time</span>
+
+<span class="hljs-comment">//    return bool/mixed bool|mixed Format: &quot;Y-m-d H:i:s&quot;</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">getTime</span>(); 
+</code></pre>
+<ul>
+<li><strong>Set Device Time</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    set device time</span>
+<span class="hljs-comment">//    parameter string $t Format: &quot;Y-m-d H:i:s&quot;</span>
+<span class="hljs-comment">//    return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">setTime</span>(); 
+</code></pre>
+<ul>
+<li><strong>Get Users</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get User</span>
+<span class="hljs-comment">//    this return array[]</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">getUser</span>(); 
+</code></pre>
+<ul>
+<li><strong>Set Users</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    set user</span>
+
+<span class="hljs-comment">//    1 s&#x27;t parameter int $uid Unique ID (max 65535)</span>
+<span class="hljs-comment">//    2 nd parameter int|string $userid ID in DB (same like $uid, max length = 9, only numbers - depends device setting)</span>
+<span class="hljs-comment">//    3 rd parameter string $name (max length = 24)</span>
+<span class="hljs-comment">//    4 th parameter int|string $password (max length = 8, only numbers - depends device setting)</span>
+<span class="hljs-comment">//    5 th parameter int $role Default Util::LEVEL_USER</span>
+<span class="hljs-comment">//    6 th parameter int $cardno Default 0 (max length = 10, only numbers</span>
+
+<span class="hljs-comment">//    return bool|mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">setUser</span>(); 
+</code></pre>
+<ul>
+<li><strong>Clear All Admin</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    remove all admin</span>
+<span class="hljs-comment">//    return bool|mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">clearAdmin</span>(); 
+</code></pre>
+<ul>
+<li><strong>Clear All Users</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    remove all users</span>
+<span class="hljs-comment">//    return bool|mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">clearAdmin</span>(); 
+</code></pre>
+<ul>
+<li><strong>Remove A User</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    remove a user by $uid</span>
+<span class="hljs-comment">//    parameter integer $uid</span>
+<span class="hljs-comment">//    return bool|mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">removeUser</span>(); 
+</code></pre>
+<ul>
+<li><strong>Get Attendance Log</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    get attendance log</span>
+
+<span class="hljs-comment">//    return array[]</span>
+
+<span class="hljs-comment">//    like as 0 =&gt; array:5 [▼</span>
+<span class="hljs-comment">//              &quot;uid&quot; =&gt; 1      /* serial number of the attendance */</span>
+<span class="hljs-comment">//              &quot;id&quot; =&gt; &quot;1&quot;     /* user id of the application */</span>
+<span class="hljs-comment">//              &quot;state&quot; =&gt; 1    /* the authentication type, 1 for Fingerprint, 4 for RF Card etc */</span>
+<span class="hljs-comment">//              &quot;timestamp&quot; =&gt; &quot;2020-05-27 21:21:06&quot; /* time of attendance */</span>
+<span class="hljs-comment">//              &quot;type&quot; =&gt; 255   /* attendance type, like check-in, check-out, overtime-in, overtime-out, break-in &amp; break-out etc. if attendance type is none of them, it gives  255. */</span>
+<span class="hljs-comment">//              ]</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">getAttendance</span>(); 
+</code></pre>
+<ul>
+<li><strong>Clear Attendance Log</strong></li>
+</ul>
+<pre><code class="language-php"><span class="hljs-comment">//    clear attendance log</span>
+
+<span class="hljs-comment">//    return bool/mixed</span>
+
+    <span class="hljs-variable">$zk</span>-&gt;<span class="hljs-title function_ invoke__">clearAttendance</span>(); 
+</code></pre>
+<h1 id="end">end</h1>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>
