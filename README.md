@@ -1,11 +1,22 @@
-# ZKTeco SDK - Laravel Most Trustable Library
-This guide demonstrates how to use the `ZKTeco` library in PHP to interact with ZKTeco devices, typically used for biometric attendance or access control systems.
+<img src="./header.png">
+
+This Laravel package provides convenient functions for interacting with ZKTeco devices, allowing seamless communication with attendance devices (such as fingerprint, face recognition, or RFID) using UDP protocol. It simplifies the process of reading and writing data directly to these devices from a web server without the need for additional programs.
+
+With this package, you can easily perform various activities with ZKTeco devices, such as retrieving attendance logs, setting user data, enabling or disabling device functions, and more, all within your Laravel application.
+
+Designed as a class-based library, you can simply create an object of the provided class and utilize its functions to interact with ZKTeco devices effortlessly.
+
+Key features include:
+
+- Reading and writing data to attendance devices using UDP protocol.
+- Seamless communication between web servers and attendance devices.
+- Simplified implementation for activities such as retrieving attendance logs, setting user data, and managing device functions.
+- Integration with Laravel framework for easy usage and compatibility.
 
 
-[![Stars](https://img.shields.io/github/stars/jmrashed/zkteco?style=flat-square)](https://github.com/jmrashed/zkteco/stargazers)
-[![Total Downloads](https://img.shields.io/packagist/dt/jmrashed/zkteco?style=flat-square)](https://packagist.org/packages/jmrashed/zkteco)
-[![License](https://poser.pugx.org/jmrashed/zkteco/license.svg)](https://packagist.org/packages/jmrashed/zkteco)
+Experience streamlined communication and management of ZKTeco devices directly from your Laravel application with this ZKTeco Laravel package.
 
+ 
 
 The `jmrashed/zkteco` package provides easy to use functions to ZKTeco Device activities.
 
