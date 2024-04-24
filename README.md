@@ -298,6 +298,44 @@ $removedUser = $zk->removeUser($uid);
 // Each entry in the array represents a single attendance record with fields: uid, id, state, timestamp, and type
 $attendanceLog = $zk->getAttendance();
 ```
+### Sample Response Example 
+```json
+  array (
+    'uid' => 33,
+    'id' => '108',
+    'state' => 1,
+    'timestamp' => '2024-04-24 18:13:47',
+    'type' => 1,
+  )
+  ```
+
+  ### Get today's Records
+  ```php
+    public function zkteco()
+    {
+        $zk = new ZKTeco('192.168.1.201');
+        $connected = $zk->connect();
+        $attendanceLog = $zk->getAttendance();
+
+        // Get today's date
+        $todayDate = date('Y-m-d');
+
+        // Filter attendance records for today
+        $todayRecords = [];
+        foreach ($attendanceLog as $record) {
+            // Extract the date from the timestamp
+            $recordDate = substr($record['timestamp'], 0, 10);
+
+            // Check if the date matches today's date
+            if ($recordDate === $todayDate) {
+                $todayRecords[] = $record;
+            }
+        }
+
+        // Now $todayRecords contains attendance records for today
+        Log::alert($todayRecords); 
+    }
+```
 
 ## 24. Clear Attendance Log
 ```php
