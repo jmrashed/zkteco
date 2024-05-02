@@ -382,9 +382,15 @@ class ZKTeco
         return Attendance::get($this);
     }
 
+// Modify the getAttendance() method in the ZKTeco class
+    public function getAttendanceWithLimit($limit = 10)
+    {
+        // Call the static method get of the Attendance class, passing $this (current instance)
+        // and $limit (number of latest records to retrieve) to retrieve the attendance log from the device.
+        return Attendance::get($this, $limit);
+    }
 
-
-    static public function getTodaysRecords(ZKTeco $self)
+    public static function getTodaysRecords(ZKTeco $self)
     {
         // Get all attendance records from the device
         $attendanceData = self::get($self);
@@ -393,17 +399,13 @@ class ZKTeco
         $currentDate = date('Y-m-d');
 
         // Filter attendance data for today
-        $todaysAttendance = array_filter($attendanceData, function($record) use ($currentDate) {
+        $todaysAttendance = array_filter($attendanceData, function ($record) use ($currentDate) {
             // Assuming the date format in the attendance data is 'Y-m-d H:i:s'
             return substr($record['timestamp'], 0, 10) === $currentDate;
         });
 
         return $todaysAttendance;
     }
-
-
-
-
 
 /**
  * Clears the attendance log of the device.

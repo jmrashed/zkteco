@@ -300,6 +300,8 @@ $attendanceLog = $zk->getAttendance();
 ```
 
 ## 24. Get Todays Attendance Log
+
+### 24.1 getTodaysRecords()
 ```php
 // Get the today attendance log from the ZKTeco device
 // Returns an array containing attendance log information
@@ -318,7 +320,7 @@ $attendanceLog = $zk->getTodaysRecords();
   )
   ```
 
-  ### Get today's Records
+  ### 24.2 Get today's Records
   ```php
     public function zkteco()
     {
@@ -345,8 +347,13 @@ $attendanceLog = $zk->getTodaysRecords();
         Log::alert($todayRecords); 
     }
 ```
+### 24.3 Get Latest Attendance with Limit
+```php
+// Get the 5 latest attendance records
+$latestAttendance = $zk->getAttendance(5);
+```
 
-## 24. Clear Attendance Log
+## 24.4 Clear Attendance Log
 ```php
 // Clear the attendance log from the ZKTeco device
 // Returns a boolean or mixed value indicating whether the attendance log was successfully cleared
