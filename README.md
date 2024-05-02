@@ -298,6 +298,15 @@ $removedUser = $zk->removeUser($uid);
 // Each entry in the array represents a single attendance record with fields: uid, id, state, timestamp, and type
 $attendanceLog = $zk->getAttendance();
 ```
+
+## 24. Get Todays Attendance Log
+```php
+// Get the today attendance log from the ZKTeco device
+// Returns an array containing attendance log information
+// Each entry in the array represents a single attendance record with fields: uid, id, state, timestamp, and type
+$attendanceLog = $zk->getTodaysRecords();
+
+```
 ### Sample Response Example 
 ```json
   array (

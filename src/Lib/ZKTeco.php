@@ -382,6 +382,29 @@ class ZKTeco
         return Attendance::get($this);
     }
 
+
+
+    static public function getTodaysRecords(ZKTeco $self)
+    {
+        // Get all attendance records from the device
+        $attendanceData = self::get($self);
+
+        // Get today's date
+        $currentDate = date('Y-m-d');
+
+        // Filter attendance data for today
+        $todaysAttendance = array_filter($attendanceData, function($record) use ($currentDate) {
+            // Assuming the date format in the attendance data is 'Y-m-d H:i:s'
+            return substr($record['timestamp'], 0, 10) === $currentDate;
+        });
+
+        return $todaysAttendance;
+    }
+
+
+
+
+
 /**
  * Clears the attendance log of the device.
  *
