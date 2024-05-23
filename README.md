@@ -1,10 +1,16 @@
 <img src="./src/Assets/header.png">
 ![Packagist Downloads](https://img.shields.io/packagist/dt/jmrashed/zkteco)
+
 ![GitHub stars](https://img.shields.io/github/stars/jmrashed/zkteco)
+
 ![GitHub forks](https://img.shields.io/github/forks/jmrashed/zkteco)
+
 ![Build Status](https://github.com/jmrashed/zkteco/actions/workflows/ci.yml/badge.svg)
+
 ![License](https://img.shields.io/github/license/jmrashed/zkteco)
+
 ![Latest Stable Version](https://img.shields.io/packagist/v/jmrashed/zkteco)
+
 
 
 This Laravel package provides convenient functions for interacting with ZKTeco devices, allowing seamless communication with attendance devices (such as fingerprint, face recognition, or RFID) using UDP protocol. It simplifies the process of reading and writing data directly to these devices from a web server without the need for additional programs.
