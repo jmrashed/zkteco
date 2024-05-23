@@ -3,8 +3,15 @@
 ![Packagist Downloads](https://img.shields.io/packagist/dt/jmrashed/zkteco)
 ![GitHub stars](https://img.shields.io/github/stars/jmrashed/zkteco)
 ![GitHub forks](https://img.shields.io/github/forks/jmrashed/zkteco)
+![Build Status](https://github.com/jmrashed/zkteco/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/github/license/jmrashed/zkteco)
 ![Latest Stable Version](https://img.shields.io/packagist/v/jmrashed/zkteco)
+![GitHub issues](https://img.shields.io/github/issues/jmrashed/zkteco)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/jmrashed/zkteco)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/jmrashed/zkteco)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/jmrashed/zkteco)
+
+
 
 
 
