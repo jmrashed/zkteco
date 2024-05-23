@@ -1,14 +1,9 @@
 <img src="./src/Assets/header.png">
+
 ![Packagist Downloads](https://img.shields.io/packagist/dt/jmrashed/zkteco)
-
 ![GitHub stars](https://img.shields.io/github/stars/jmrashed/zkteco)
-
 ![GitHub forks](https://img.shields.io/github/forks/jmrashed/zkteco)
-
-![Build Status](https://github.com/jmrashed/zkteco/actions/workflows/ci.yml/badge.svg)
-
 ![License](https://img.shields.io/github/license/jmrashed/zkteco)
-
 ![Latest Stable Version](https://img.shields.io/packagist/v/jmrashed/zkteco)
 
 
