@@ -373,6 +373,138 @@ $latestAttendance = $zk->getAttendance(5);
 // Returns a boolean or mixed value indicating whether the attendance log was successfully cleared
 $clearedAttendance = $zk->clearAttendance();
 ```
+
+# Enhanced User Management Features
+
+## 25. Parse Fingerprint Template Data
+```php
+// Parse raw fingerprint template data into structured format
+// Returns array with template metadata and quality score
+$parsedTemplate = $zk->parseFingerprintTemplate($rawTemplateData);
+
+// Example response:
+// [
+//     'valid' => true,
+//     'template_size' => 512,
+//     'uid' => 123,
+//     'finger_id' => 1,
+//     'flag' => 1,
+//     'template_data' => '...',
+//     'quality_score' => 85
+// ]
+```
+
+## 26. Enroll Fingerprint Template
+```php
+// Enroll a new fingerprint template for a user
+// Parameters: uid, finger_id (0-9), template_data
+$enrolled = $zk->enrollFingerprint(123, 1, $templateData);
+```
+
+## 27. Get User Face Data
+```php
+// Retrieve face recognition templates for a user
+// Returns array of face templates with quality scores
+$faceData = $zk->getFaceData(123);
+
+// Example response:
+// [
+//     50 => [
+//         'template' => '...',
+//         'size' => 1024,
+//         'quality' => 92
+//     ]
+// ]
+```
+
+## 28. Set User Face Data
+```php
+// Set face recognition templates for a user
+$faceData = [
+    50 => ['template' => $faceTemplateData]
+];
+$result = $zk->setFaceData(123, $faceData);
+```
+
+## 29. Enroll Face Template
+```php
+// Enroll a face recognition template for a user
+// Automatically finds available slot
+$enrolled = $zk->enrollFaceTemplate(123, $faceTemplateData);
+```
+
+## 30. Get User Card Number
+```php
+// Retrieve the card number for a specific user
+$cardNumber = $zk->getUserCardNumber(123);
+// Returns: "1234567890" or false if not found
+```
+
+## 31. Advanced User Role Management
+
+### 31.1 Set User Role with Permissions
+```php
+// Set advanced user role with granular permissions
+$permissions = ['attendance', 'reports', 'user_management'];
+$result = $zk->setUserRole(123, Util::LEVEL_ADMIN, $permissions);
+```
+
+### 31.2 Get User Role Information
+```php
+// Get detailed role information for a user
+$roleInfo = $zk->getUserRole(123);
+
+// Example response:
+// [
+//     'role_id' => 14,
+//     'role_name' => 'Administrator',
+//     'permissions' => ['all_access', 'user_management', 'system_config'],
+//     'can_enroll' => true,
+//     'can_manage_users' => true,
+//     'can_view_logs' => true
+// ]
+```
+
+### 31.3 Get Available Roles
+```php
+// Get all available user roles and their descriptions
+$availableRoles = $zk->getAvailableRoles();
+
+// Example response:
+// [
+//     0 => [
+//         'name' => 'User',
+//         'description' => 'Standard user with basic access',
+//         'permissions' => ['attendance', 'view_own_records']
+//     ],
+//     14 => [
+//         'name' => 'Administrator', 
+//         'description' => 'Full administrative access',
+//         'permissions' => ['all_access', 'user_management', 'system_config']
+//     ]
+// ]
+```
+
+## 32. Quality Assessment
+
+### 32.1 Fingerprint Quality
+```php
+// Get fingerprint template with quality assessment
+$fingerprints = $zk->getFingerprint(123);
+foreach ($fingerprints as $fingerId => $template) {
+    $parsed = $zk->parseFingerprintTemplate($template);
+    echo "Finger {$fingerId} quality: {$parsed['quality_score']}%";
+}
+```
+
+### 32.2 Face Template Quality
+```php
+// Get face templates with quality scores
+$faceData = $zk->getFaceData(123);
+foreach ($faceData as $faceId => $data) {
+    echo "Face template {$faceId} quality: {$data['quality']}%";
+}
+```
 # Change log
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 

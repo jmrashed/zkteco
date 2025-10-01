@@ -1,5 +1,6 @@
 {
     "name": "jmrashed/zkteco",
+    "version": "1.1.0",
     "description": "ZKTeco Package For Laravel. This package provides seamless integration with ZKTeco devices within Laravel applications, enabling communication with attendance devices such as fingerprint, face recognition, or RFID using UDP protocol.",
     "type": "library",
     "license": "MIT",
@@ -14,6 +15,11 @@
           "Jmrashed\\Zkteco\\": "src"
       }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "minimum-stability": "dev",
     "require": {
         "php": "^8.0"
@@ -24,6 +30,10 @@
     },
     "provides": {
         "jmrashed/zkteco": "dev-master"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage"
     },
     "suggests": {
     }

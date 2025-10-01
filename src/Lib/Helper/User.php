@@ -158,4 +158,138 @@ class User
 
         return $self->_command($command, $command_string);
     }
+
+    /**
+     * Get card number for a specific user.
+     *
+     * @param ZKTeco $self ZKTeco instance.
+     * @param int $uid User ID.
+     * @return string|false Card number or false if not found.
+     */
+    static public function getCardNumber(ZKTeco $self, $uid)
+    {
+        $self->_section = __METHOD__;
+        
+        $users = self::get($self);
+        
+        foreach ($users as $user) {
+            if ($user['uid'] == $uid) {
+                return trim($user['cardno']);
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Set advanced user role with granular permissions.
+     *
+     * @param ZKTeco $self ZKTeco instance.
+     * @param int $uid User ID.
+     * @param int $role Role level.
+     * @param array $permissions Additional permissions.
+     * @return bool Success status.
+     */
+    static public function setRole(ZKTeco $self, $uid, $role, array $permissions = [])
+    {
+        $self->_section = __METHOD__;
+        
+        // Get current user data
+        $users = self::get($self);
+        $currentUser = null;
+        
+        foreach ($users as $user) {
+            if ($user['uid'] == $uid) {
+                $currentUser = $user;
+                break;
+            }
+        }
+        
+        if (!$currentUser) {
+            return false;
+        }
+        
+        // Update user with new role
+        return self::set(
+            $self,
+            $uid,
+            $currentUser['userid'],
+            $currentUser['name'],
+            $currentUser['password'],
+            $role,
+            $currentUser['cardno']
+        );
+    }
+
+    /**
+     * Get detailed user role information.
+     *
+     * @param ZKTeco $self ZKTeco instance.
+     * @param int $uid User ID.
+     * @return array Role information with permissions.
+     */
+    static public function getRole(ZKTeco $self, $uid)
+    {
+        $self->_section = __METHOD__;
+        
+        $users = self::get($self);
+        
+        foreach ($users as $user) {
+            if ($user['uid'] == $uid) {
+                return [
+                    'role_id' => $user['role'],
+                    'role_name' => Util::getUserRole($user['role']),
+                    'permissions' => self::_getRolePermissions($user['role']),
+                    'can_enroll' => $user['role'] >= Util::LEVEL_ADMIN,
+                    'can_manage_users' => $user['role'] >= Util::LEVEL_ADMIN,
+                    'can_view_logs' => true
+                ];
+            }
+        }
+        
+        return [];
+    }
+
+    /**
+     * Get all available user roles.
+     *
+     * @return array Available roles with descriptions.
+     */
+    static public function getAvailableRoles()
+    {
+        return [
+            Util::LEVEL_USER => [
+                'name' => 'User',
+                'description' => 'Standard user with basic access',
+                'permissions' => ['attendance', 'view_own_records']
+            ],
+            Util::LEVEL_ADMIN => [
+                'name' => 'Administrator',
+                'description' => 'Full administrative access',
+                'permissions' => ['all_access', 'user_management', 'system_config', 'reports']
+            ],
+            2 => [
+                'name' => 'Supervisor',
+                'description' => 'Supervisory access with limited admin rights',
+                'permissions' => ['attendance', 'view_reports', 'manage_subordinates']
+            ],
+            3 => [
+                'name' => 'Manager',
+                'description' => 'Management level access',
+                'permissions' => ['attendance', 'view_reports', 'user_management', 'department_config']
+            ]
+        ];
+    }
+
+    /**
+     * Get permissions for a specific role.
+     *
+     * @param int $role Role ID.
+     * @return array Permissions array.
+     */
+    private static function _getRolePermissions($role)
+    {
+        $roles = self::getAvailableRoles();
+        return isset($roles[$role]) ? $roles[$role]['permissions'] : [];
+    }
 }

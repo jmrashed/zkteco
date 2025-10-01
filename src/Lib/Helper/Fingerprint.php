@@ -171,4 +171,93 @@ class Fingerprint
         $res = $fingerPrint->_getFinger($self, $uid, $finger);
         return (bool)($res['size'] > 0);
     }
+
+    /**
+     * Parse raw fingerprint template data into structured format.
+     *
+     * @param string $rawData Raw fingerprint template data.
+     * @return array Parsed template with metadata.
+     */
+    static public function parseTemplate($rawData)
+    {
+        if (empty($rawData) || strlen($rawData) < 6) {
+            return ['valid' => false, 'error' => 'Invalid template data'];
+        }
+
+        $templateSize = ord($rawData[0]) + (ord($rawData[1]) << 8);
+        $uid = ord($rawData[2]) + (ord($rawData[3]) << 8);
+        $fingerId = ord($rawData[4]);
+        $flag = ord($rawData[5]);
+        
+        $templateData = substr($rawData, 6);
+        
+        return [
+            'valid' => true,
+            'template_size' => $templateSize,
+            'uid' => $uid,
+            'finger_id' => $fingerId,
+            'flag' => $flag,
+            'template_data' => $templateData,
+            'quality_score' => self::_calculateQuality($templateData)
+        ];
+    }
+
+    /**
+     * Enroll a new fingerprint template for a user.
+     *
+     * @param ZKTeco $self ZKTeco instance.
+     * @param int $uid User ID.
+     * @param int $fingerId Finger ID (0-9).
+     * @param string $templateData Template data.
+     * @return bool Success status.
+     */
+    static public function enroll(ZKTeco $self, $uid, $fingerId, $templateData)
+    {
+        $self->_section = __METHOD__;
+        
+        if ($fingerId < 0 || $fingerId > 9) {
+            return false;
+        }
+        
+        $fingerprint = new Fingerprint();
+        
+        // Remove existing fingerprint if present
+        if ($fingerprint->_checkFinger($self, $uid, $fingerId)) {
+            $fingerprint->_removeFinger($self, $uid, $fingerId);
+        }
+        
+        // Prepare template data with proper header
+        $templateSize = strlen($templateData);
+        $byte1 = chr($uid % 256);
+        $byte2 = chr($uid >> 8);
+        
+        $formattedData = chr($templateSize % 256) . chr($templateSize >> 8) . 
+                        $byte1 . $byte2 . chr($fingerId) . chr(1) . $templateData;
+        
+        return $fingerprint->_setFinger($self, $formattedData);
+    }
+
+    /**
+     * Calculate fingerprint template quality score.
+     *
+     * @param string $templateData Template data.
+     * @return int Quality score (0-100).
+     */
+    private static function _calculateQuality($templateData)
+    {
+        if (empty($templateData)) {
+            return 0;
+        }
+        
+        $length = strlen($templateData);
+        $complexity = 0;
+        
+        // Simple quality calculation based on data complexity
+        for ($i = 0; $i < min($length, 100); $i++) {
+            $complexity += ord($templateData[$i]);
+        }
+        
+        $quality = min(100, ($complexity / min($length, 100)) * 0.4);
+        return (int)$quality;
+    }
 }

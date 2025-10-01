@@ -332,12 +332,9 @@ class ZKTeco
  *
  * @param integer $uid Unique ID (max 65535) of the user whose fingerprint data will be retrieved.
  * @return array Binary fingerprint data array, where the key is finger ID (0-9).
- * TODO: Can get data, but don't know how to parse the data. More documentation is needed to understand how to parse the data.
  */
     public function getFingerprint($uid)
     {
-        // Call the static method get of the Fingerprint class, passing $this (current instance) and $uid (unique ID)
-        // to retrieve the fingerprint data array.
         return Fingerprint::get($this, $uid);
     }
 
@@ -347,13 +344,34 @@ class ZKTeco
  * @param integer $uid Unique ID (max 65535) of the user for whom the fingerprints will be set.
  * @param array $data Binary fingerprint data array, where the key is finger ID (0-9) same as returned array from 'getFingerprint' method.
  * @return int The count of added fingerprints.
- * TODO: Still cannot set fingerprint. More documentation is needed to understand the process.
  */
     public function setFingerprint($uid, array $data)
     {
-        // Call the static method set of the Fingerprint class, passing $this (current instance),
-        // $uid (unique ID), and $data (binary fingerprint data array) to set the fingerprints.
         return Fingerprint::set($this, $uid, $data);
+    }
+
+/**
+ * Parses raw fingerprint template data into a structured format.
+ *
+ * @param string $rawData Raw fingerprint template data from device.
+ * @return array Parsed fingerprint template with metadata.
+ */
+    public function parseFingerprintTemplate($rawData)
+    {
+        return Fingerprint::parseTemplate($rawData);
+    }
+
+/**
+ * Enrolls a new fingerprint template for a user.
+ *
+ * @param integer $uid User ID.
+ * @param integer $fingerId Finger ID (0-9).
+ * @param string $templateData Fingerprint template data.
+ * @return bool Success status.
+ */
+    public function enrollFingerprint($uid, $fingerId, $templateData)
+    {
+        return Fingerprint::enroll($this, $uid, $fingerId, $templateData);
     }
 
 /**
@@ -526,6 +544,86 @@ class ZKTeco
         // Call the static method writeLCD of the Device class, passing $this (current instance),
         // 2 (the LCD screen identifier), and "Welcome Jmrashed" (the message to display).
         return Device::writeLCD($this, 2, "Welcome Jmrashed");
+    }
+
+/**
+ * Retrieves face template data for a specific user.
+ *
+ * @param integer $uid User ID.
+ * @return array Face template data.
+ */
+    public function getFaceData($uid)
+    {
+        return Face::getData($this, $uid);
+    }
+
+/**
+ * Sets face template data for a specific user.
+ *
+ * @param integer $uid User ID.
+ * @param array $faceData Face template data.
+ * @return bool Success status.
+ */
+    public function setFaceData($uid, array $faceData)
+    {
+        return Face::setData($this, $uid, $faceData);
+    }
+
+/**
+ * Enrolls face recognition template for a user.
+ *
+ * @param integer $uid User ID.
+ * @param string $templateData Face template data.
+ * @return bool Success status.
+ */
+    public function enrollFaceTemplate($uid, $templateData)
+    {
+        return Face::enrollTemplate($this, $uid, $templateData);
+    }
+
+/**
+ * Retrieves the card number for a specific user.
+ *
+ * @param integer $uid User ID.
+ * @return string|false Card number or false if not found.
+ */
+    public function getUserCardNumber($uid)
+    {
+        return User::getCardNumber($this, $uid);
+    }
+
+/**
+ * Sets advanced user role with granular permissions.
+ *
+ * @param integer $uid User ID.
+ * @param integer $role Role level.
+ * @param array $permissions Additional permissions array.
+ * @return bool Success status.
+ */
+    public function setUserRole($uid, $role, array $permissions = [])
+    {
+        return User::setRole($this, $uid, $role, $permissions);
+    }
+
+/**
+ * Retrieves detailed user role information including permissions.
+ *
+ * @param integer $uid User ID.
+ * @return array Role information with permissions.
+ */
+    public function getUserRole($uid)
+    {
+        return User::getRole($this, $uid);
+    }
+
+/**
+ * Retrieves all available user roles and their descriptions.
+ *
+ * @return array Available roles with descriptions.
+ */
+    public function getAvailableRoles()
+    {
+        return User::getAvailableRoles();
     }
 
 }
