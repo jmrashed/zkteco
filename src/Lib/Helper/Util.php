@@ -24,6 +24,9 @@ class Util
 
   const CMD_WRITE_LCD = 66; # Write in LCD
   const CMD_CLEAR_LCD = 67; # Clear LCD
+  const CMD_DOOR_CONTROL = 400; # Door control command
+  const CMD_DOOR_STATUS = 401; # Get door status
+  const CMD_REG_EVENT = 500; # Register for real-time events
 
   const CMD_ACK_OK = 2000; # Return value for order perform successfully
   const CMD_ACK_ERROR = 2001; # Return value for order perform failed
@@ -73,6 +76,20 @@ class Util
   const ATT_TYPE_CHECK_OUT = 1;
   const ATT_TYPE_OVERTIME_IN = 4;
   const ATT_TYPE_OVERTIME_OUT = 5;
+
+  const DOOR_ACTION_OPEN = 1;
+  const DOOR_ACTION_CLOSE = 2;
+  const DOOR_ACTION_LOCK = 3;
+  const DOOR_ACTION_UNLOCK = 4;
+
+  const EVENT_TYPE_ATTENDANCE = 1;
+  const EVENT_TYPE_DOOR_OPEN = 2;
+  const EVENT_TYPE_DOOR_CLOSE = 3;
+  const EVENT_TYPE_ALARM = 4;
+  const EVENT_TYPE_USER_ENROLL = 5;
+  const EVENT_TYPE_USER_DELETE = 6;
+  const EVENT_TYPE_SYSTEM_START = 7;
+  const EVENT_TYPE_SYSTEM_SHUTDOWN = 8;
 
   /**
    * Encode a timestamp send at the timeclock

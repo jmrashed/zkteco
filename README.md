@@ -505,6 +505,256 @@ foreach ($faceData as $faceId => $data) {
     echo "Face template {$faceId} quality: {$data['quality']}%";
 }
 ```
+
+# Advanced Device Management Features
+
+## 33. Custom LCD Message Display
+
+### 33.1 Display Custom Message
+```php
+// Display custom message on LCD screen
+// Parameters: message, line (1-4), duration in seconds (0 = permanent)
+$result = $zk->displayCustomMessage('Welcome John!', 1, 10);
+```
+
+### 33.2 Display Permanent Message
+```php
+// Display permanent message (until manually cleared)
+$result = $zk->displayCustomMessage('System Maintenance', 2, 0);
+```
+
+### 33.3 Clear LCD Screen
+```php
+// Clear all LCD content
+$result = $zk->clearLCD();
+```
+
+## 34. Door Control Functions
+
+### 34.1 Open Door
+```php
+// Open door remotely
+$result = $zk->openDoor(1); // Door ID 1
+```
+
+### 34.2 Close Door
+```php
+// Close door remotely
+$result = $zk->closeDoor(1);
+```
+
+### 34.3 Lock Door
+```php
+// Lock door remotely
+$result = $zk->lockDoor(1);
+```
+
+### 34.4 Unlock Door
+```php
+// Unlock door remotely
+$result = $zk->unlockDoor(1);
+```
+
+### 34.5 Get Door Status
+```php
+// Get current door status
+$status = $zk->getDoorStatus(1);
+
+// Example response:
+// [
+//     'door_open' => true,
+//     'door_locked' => false,
+//     'sensor_active' => true,
+//     'alarm_active' => false,
+//     'timestamp' => '2024-10-01 15:30:45'
+// ]
+```
+
+## 35. Time Zone Synchronization
+
+### 35.1 Sync with Server Timezone
+```php
+// Sync device time with server's default timezone
+$result = $zk->syncTimeZone();
+```
+
+### 35.2 Sync with Custom Timezone
+```php
+// Sync device time with specific timezone
+$result = $zk->syncTimeZone('America/New_York');
+$result = $zk->syncTimeZone('Europe/London');
+$result = $zk->syncTimeZone('Asia/Tokyo');
+```
+
+## 36. Real-time Event Monitoring
+
+### 36.1 Get Real-time Events
+```php
+// Get real-time events with timeout
+$events = $zk->getRealTimeEvents(30); // 30 seconds timeout
+
+// Example response:
+// [
+//     [
+//         'type' => 'attendance',
+//         'uid' => 123,
+//         'timestamp' => '2024-10-01 15:30:45',
+//         'state' => 1,
+//         'raw_data' => '...' 
+//     ]
+// ]
+```
+
+### 36.2 Start Event Monitoring with Callback
+```php
+// Start monitoring with custom callback
+$callback = function($event) {
+    echo "Event: {$event['type']} - User: {$event['uid']} - Time: {$event['timestamp']}\n";
+    
+    // Handle different event types
+    switch($event['type']) {
+        case 'attendance':
+            // Process attendance event
+            break;
+        case 'door_open':
+            // Handle door open event
+            break;
+        case 'alarm':
+            // Handle alarm event
+            break;
+    }
+};
+
+// Start monitoring (runs for 60 seconds)
+$zk->startEventMonitoring($callback, 60);
+```
+
+### 36.3 Advanced Event Monitoring
+```php
+// Get event monitor instance for advanced handling
+$monitor = $zk->getEventMonitor();
+
+// Register specific event handlers
+$monitor->on('attendance', function($event) {
+    echo "Attendance event for user {$event['uid']}\n";
+});
+
+$monitor->on('door_open', function($event) {
+    echo "Door opened by user {$event['uid']}\n";
+});
+
+$monitor->on('alarm', function($event) {
+    echo "ALARM: {$event['timestamp']}\n";
+    // Send notification, log to database, etc.
+});
+
+// Register handler for all events
+$monitor->on('*', function($event) {
+    // Log all events to database
+    logEventToDatabase($event);
+});
+
+// Start monitoring
+$monitor->start(); // Runs indefinitely
+
+// Stop monitoring
+$monitor->stop();
+```
+
+### 36.4 Stop Event Monitoring
+```php
+// Stop real-time event monitoring
+$result = $zk->stopEventMonitoring();
+```
+
+## 37. Event Types
+
+The system supports various event types:
+
+- **attendance**: User attendance punch (check-in/out)
+- **door_open**: Door opened event
+- **door_close**: Door closed event  
+- **alarm**: Security alarm triggered
+- **user_enroll**: New user enrolled
+- **user_delete**: User deleted
+- **system_start**: Device started/rebooted
+- **system_shutdown**: Device shutdown
+
+## 38. Door Control Constants
+
+```php
+// Door action constants
+Util::DOOR_ACTION_OPEN    // Open door
+Util::DOOR_ACTION_CLOSE   // Close door
+Util::DOOR_ACTION_LOCK    // Lock door
+Util::DOOR_ACTION_UNLOCK  // Unlock door
+
+// Event type constants
+Util::EVENT_TYPE_ATTENDANCE      // Attendance event
+Util::EVENT_TYPE_DOOR_OPEN       // Door open event
+Util::EVENT_TYPE_DOOR_CLOSE      // Door close event
+Util::EVENT_TYPE_ALARM           // Alarm event
+Util::EVENT_TYPE_USER_ENROLL     // User enrollment event
+Util::EVENT_TYPE_USER_DELETE     // User deletion event
+Util::EVENT_TYPE_SYSTEM_START    // System start event
+Util::EVENT_TYPE_SYSTEM_SHUTDOWN // System shutdown event
+```
+
+## 39. Usage Examples
+
+### 39.1 Complete Door Management
+```php
+// Initialize device
+$zk = new ZKTeco('192.168.1.201');
+$zk->connect();
+
+// Check door status
+$status = $zk->getDoorStatus(1);
+if ($status['door_locked']) {
+    // Unlock door for authorized access
+    $zk->unlockDoor(1);
+    $zk->displayCustomMessage('Door Unlocked', 1, 5);
+}
+
+// Open door
+$zk->openDoor(1);
+
+// Wait and close
+sleep(10);
+$zk->closeDoor(1);
+$zk->lockDoor(1);
+
+$zk->disconnect();
+```
+
+### 39.2 Real-time Monitoring System
+```php
+$zk = new ZKTeco('192.168.1.201');
+$zk->connect();
+
+$monitor = $zk->getEventMonitor();
+
+// Set up event handlers
+$monitor->on('attendance', function($event) {
+    // Log attendance to database
+    $user = getUserById($event['uid']);
+    logAttendance($user, $event['timestamp'], $event['state']);
+    
+    // Display welcome message
+    $zk->displayCustomMessage("Welcome {$user['name']}!", 1, 3);
+});
+
+$monitor->on('alarm', function($event) {
+    // Send alert notifications
+    sendSecurityAlert($event);
+    
+    // Display alarm message
+    $zk->displayCustomMessage('SECURITY ALERT!', 1, 0);
+});
+
+// Start monitoring
+$monitor->start();
+```
 # Change log
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 

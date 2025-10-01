@@ -1,6 +1,27 @@
 # Change log
 All notable changes to `jmrashed/zkteco` will be documented in this file
 
+## Version 1.2.0 at 1 October 2025
+### What's Changed
+#### Advanced Device Management Features
+- **NEW**: Real-time Event Monitoring - Monitor device events like attendance punches, door events, and system alerts
+- **NEW**: Door Control Functions - Remotely open, close, lock, and unlock doors with status monitoring
+- **NEW**: Custom LCD Message Display - Send custom formatted messages to device LCD screen with duration control
+- **NEW**: Time Zone Synchronization - Automatically sync device time with server timezone
+- **NEW**: Event Handler System - Advanced event handling with callback registration and filtering
+- **NEW**: Door Status Monitoring - Real-time door status including lock state, sensor status, and alarms
+- **NEW**: Event Monitor Class - Dedicated class for managing real-time event subscriptions
+- **IMPROVED**: Enhanced device communication with better error handling
+- **ADDED**: Comprehensive test suite for device management features
+
+#### Technical Improvements
+- Enhanced Device helper class with advanced control functions
+- Added EventMonitor helper class for event management
+- New constants for door actions and event types
+- Improved real-time communication protocols
+- Enhanced LCD message formatting and duration control
+- Production-ready event polling and parsing
+
 ## Version 1.1.0 at 1 October 2025
 ### What's Changed
 #### Enhanced User Management Features

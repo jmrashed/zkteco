@@ -7,6 +7,7 @@ use Exception;
 use Jmrashed\Zkteco\Lib\Helper\Attendance;
 use Jmrashed\Zkteco\Lib\Helper\Connect;
 use Jmrashed\Zkteco\Lib\Helper\Device;
+use Jmrashed\Zkteco\Lib\Helper\EventMonitor;
 use Jmrashed\Zkteco\Lib\Helper\Face;
 use Jmrashed\Zkteco\Lib\Helper\Fingerprint;
 use Jmrashed\Zkteco\Lib\Helper\Os;
@@ -29,6 +30,7 @@ class ZKTeco
     public $_data_recv = '';
     public $_session_id = 0;
     public $_section = '';
+    private $_eventMonitor = null;
 
 /**
  * ZKLib constructor.
@@ -624,6 +626,132 @@ class ZKTeco
     public function getAvailableRoles()
     {
         return User::getAvailableRoles();
+    }
+
+/**
+ * Display custom message on device LCD screen.
+ *
+ * @param string $message Message to display.
+ * @param int $line Line number (1-4).
+ * @param int $duration Display duration in seconds (0 = permanent).
+ * @return bool Success status.
+ */
+    public function displayCustomMessage($message, $line = 1, $duration = 0)
+    {
+        return Device::displayCustomMessage($this, $message, $line, $duration);
+    }
+
+/**
+ * Open door remotely.
+ *
+ * @param int $doorId Door ID (default 1).
+ * @return bool Success status.
+ */
+    public function openDoor($doorId = 1)
+    {
+        return Device::openDoor($this, $doorId);
+    }
+
+/**
+ * Close door remotely.
+ *
+ * @param int $doorId Door ID (default 1).
+ * @return bool Success status.
+ */
+    public function closeDoor($doorId = 1)
+    {
+        return Device::closeDoor($this, $doorId);
+    }
+
+/**
+ * Lock door remotely.
+ *
+ * @param int $doorId Door ID (default 1).
+ * @return bool Success status.
+ */
+    public function lockDoor($doorId = 1)
+    {
+        return Device::lockDoor($this, $doorId);
+    }
+
+/**
+ * Unlock door remotely.
+ *
+ * @param int $doorId Door ID (default 1).
+ * @return bool Success status.
+ */
+    public function unlockDoor($doorId = 1)
+    {
+        return Device::unlockDoor($this, $doorId);
+    }
+
+/**
+ * Get door status information.
+ *
+ * @param int $doorId Door ID (default 1).
+ * @return array Door status information.
+ */
+    public function getDoorStatus($doorId = 1)
+    {
+        return Device::getDoorStatus($this, $doorId);
+    }
+
+/**
+ * Synchronize device time with server timezone.
+ *
+ * @param string $timezone Timezone identifier (e.g., 'America/New_York').
+ * @return bool Success status.
+ */
+    public function syncTimeZone($timezone = null)
+    {
+        return Device::syncTimeZone($this, $timezone);
+    }
+
+/**
+ * Get real-time events from device.
+ *
+ * @param int $timeout Timeout in seconds.
+ * @return array Real-time events.
+ */
+    public function getRealTimeEvents($timeout = 30)
+    {
+        return Device::getRealTimeEvents($this, $timeout);
+    }
+
+/**
+ * Start real-time event monitoring with callback.
+ *
+ * @param callable $callback Callback function to handle events.
+ * @param int $timeout Monitoring timeout in seconds (0 = infinite).
+ * @return bool Success status.
+ */
+    public function startEventMonitoring(callable $callback, $timeout = 0)
+    {
+        return Device::startEventMonitoring($this, $callback, $timeout);
+    }
+
+/**
+ * Stop real-time event monitoring.
+ *
+ * @return bool Success status.
+ */
+    public function stopEventMonitoring()
+    {
+        return Device::stopEventMonitoring($this);
+    }
+
+/**
+ * Get event monitor instance for advanced event handling.
+ *
+ * @return EventMonitor Event monitor instance.
+ */
+    public function getEventMonitor()
+    {
+        if ($this->_eventMonitor === null) {
+            $this->_eventMonitor = new EventMonitor($this);
+        }
+        
+        return $this->_eventMonitor;
     }
 
 }
