@@ -208,7 +208,7 @@ class Fingerprint
      * @param ZKTeco $self ZKTeco instance.
      * @param int $uid User ID.
      * @param int $fingerId Finger ID (0-9).
-     * @param string $templateData Template data.
+     * @param string $templateData Template data (raw from getFingerprint or just template data).
      * @return bool Success status.
      */
     static public function enroll(ZKTeco $self, $uid, $fingerId, $templateData)
@@ -226,7 +226,21 @@ class Fingerprint
             $fingerprint->_removeFinger($self, $uid, $fingerId);
         }
         
-        // Prepare template data with proper header
+        // Check if templateData already has header (from getFingerprint)
+        if (strlen($templateData) >= 6) {
+            // Check if it looks like it already has a header
+            $possibleSize = ord($templateData[0]) + (ord($templateData[1]) << 8);
+            $possibleUid = ord($templateData[2]) + (ord($templateData[3]) << 8);
+            $possibleFingerId = ord($templateData[4]);
+            
+            // If header matches expected values, use data as-is
+            if ($possibleUid == $uid && $possibleFingerId == $fingerId && 
+                $possibleSize == (strlen($templateData) - 6)) {
+                return $fingerprint->_setFinger($self, $templateData);
+            }
+        }
+        
+        // Prepare template data with proper header (for raw template data)
         $templateSize = strlen($templateData);
         $byte1 = chr($uid % 256);
         $byte2 = chr($uid >> 8);

@@ -1,6 +1,21 @@
 # Change log
 All notable changes to `jmrashed/zkteco` will be documented in this file
 
+## Version 1.3.0 at 5 October 2025
+### What's Changed
+#### Bug Fixes
+- **FIXED**: enrollFingerprint method now properly handles raw template data from getFingerprint()
+- **FIXED**: Resolved "unpack(): Type H: not enough input" error when transferring fingerprint templates between devices
+- **FIXED**: Template data corruption issue caused by double header addition
+- **IMPROVED**: Enhanced template data validation and header detection
+- **IMPROVED**: Better error handling for fingerprint enrollment operations
+
+#### Technical Improvements
+- Enhanced Fingerprint::enroll() method with intelligent header detection
+- Added validation for existing template headers before processing
+- Improved compatibility for transferring templates between different ZKTeco devices
+- Better handling of both raw and parsed fingerprint template data
+
 ## Version 1.2.0 at 1 October 2025
 ### What's Changed
 #### Advanced Device Management Features
