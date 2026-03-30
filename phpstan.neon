@@ -1,0 +1,11 @@
+parameters:
+  paths:
+    - src
+    - tests
+  level: max
+  inferPrivatePropertyTypeFromConstructor: true
+  checkMissingIterableValueType: true
+  checkMissingVarTagType: true
+  checkUninitializedProperty: true
+  checkMissingClassExists: true
+  checkThisOnly: true

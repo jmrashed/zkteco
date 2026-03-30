@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Jmrashed\Zkteco\Lib;
 
@@ -23,14 +23,14 @@ use Jmrashed\Zkteco\Lib\Helper\WorkCode;
 
 class ZKTeco
 {
-    public $_ip;
-    public $_port;
-    public $_zkclient;
+    public string $_ip;
+    public int $_port;
+    public mixed $_zkclient;
 
-    public $_data_recv = '';
-    public $_session_id = 0;
-    public $_section = '';
-    private $_eventMonitor = null;
+    public string $_data_recv = '';
+    public int $_session_id = 0;
+    public string $_section = '';
+    private ?EventMonitor $_eventMonitor = null;
 
 /**
  * ZKLib constructor.
@@ -38,7 +38,7 @@ class ZKTeco
  * @param string $ip Device IP address.
  * @param int $port Port number. Default: 4370.
  */
-    public function __construct($ip, $port = 4370)
+    public function __construct(string $ip, int $port = 4370)
     {
         // Set the IP address and port.
         $this->_ip = $ip;
@@ -47,9 +47,17 @@ class ZKTeco
         // Create a UDP socket.
         $this->_zkclient = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 
+        if ($this->_zkclient === false) {
+            throw new \RuntimeException('Socket creation failed: ' . socket_strerror(socket_last_error()));
+        }
+
         // Set the receive timeout to 60 seconds and 500 milliseconds.
-        $timeout = array('sec' => 60, 'usec' => 500000);
-        socket_set_option($this->_zkclient, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+        $timeout = ['sec' => 60, 'usec' => 500000];
+        $result = socket_set_option($this->_zkclient, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+
+        if ($result === false) {
+            throw new \RuntimeException('Setting socket timeout failed: ' . socket_strerror(socket_last_error($this->_zkclient)));
+        }
     }
 
     /**
@@ -73,7 +81,15 @@ class ZKTeco
         socket_sendto($this->_zkclient, $buf, strlen($buf), 0, $this->_ip, $this->_port);
 
         try {
-            @socket_recvfrom($this->_zkclient, $this->_data_recv, 1024, 0, $this->_ip, $this->_port);
+            $bytes = socket_recvfrom($this->_zkclient, $this->_data_recv, 1024, 0, $this->_ip, $this->_port);
+
+            if ($bytes === false || $bytes === 0) {
+                return false;
+            }
+
+            if (strlen($this->_data_recv) < 8) {
+                return false;
+            }
 
             $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6', substr($this->_data_recv, 0, 8));
 
@@ -82,14 +98,12 @@ class ZKTeco
 
             if ($type === Util::COMMAND_TYPE_GENERAL && $session_id === $session) {
                 $ret = substr($this->_data_recv, 8);
-            } else if ($type === Util::COMMAND_TYPE_DATA && !empty($session)) {
+            } elseif ($type === Util::COMMAND_TYPE_DATA && $session > 0) {
                 $ret = $session;
             }
 
             return $ret;
-        } catch (ErrorException $e) {
-            return false;
-        } catch (Exception $e) {
+        } catch (ErrorException|Exception $e) {
             return false;
         }
     }
@@ -402,7 +416,13 @@ class ZKTeco
         return Attendance::get($this);
     }
 
-// Modify the getAttendance() method in the ZKTeco class
+    public function getAttendanceWithUser()
+    {
+        // Fetch attendance and enrich with user details if available.
+        return Attendance::getWithUser($this);
+    }
+
+    // Modify the getAttendance() method in the ZKTeco class
     public function getAttendanceWithLimit($limit = 10)
     {
         // Call the static method get of the Attendance class, passing $this (current instance)

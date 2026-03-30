@@ -69,6 +69,50 @@ class Attendance
   }
 
   /**
+   * Fetch attendance data and merge with user details.
+   *
+   * @param ZKTeco $self
+   * @return array
+   */
+  static public function getWithUser(ZKTeco $self)
+  {
+    $attendance = self::get($self);
+    if (empty($attendance)) {
+      return [];
+    }
+
+    $users = User::get($self);
+    $userByUid = [];
+    foreach ($users as $u) {
+      $uid = isset($u['uid']) ? (int) $u['uid'] : null;
+      if ($uid !== null) {
+        $userByUid[$uid] = $u;
+      }
+    }
+
+    foreach ($attendance as &$row) {
+      $uid = isset($row['uid']) ? (int) $row['uid'] : null;
+      if ($uid !== null && isset($userByUid[$uid])) {
+        $row['user'] = [
+          'uid' => $userByUid[$uid]['uid'] ?? null,
+          'userid' => $userByUid[$uid]['userid'] ?? null,
+          'name' => $userByUid[$uid]['name'] ?? null,
+          'role' => $userByUid[$uid]['role'] ?? null,
+          'cardno' => isset($userByUid[$uid]['cardno']) ? trim((string) $userByUid[$uid]['cardno']) : null,
+        ];
+      } else {
+        $row['user'] = null;
+      }
+
+      $row['state_name'] = Util::getAttState($row['state'] ?? -1);
+      $row['type_name'] = isset($row['type']) ? (string) $row['type'] : 'Unknown';
+    }
+    unset($row);
+
+    return $attendance;
+  }
+
+  /**
    * Clears attendance data from the ZKTeco device.
    *
    * This method sends a command to the ZKTeco device to clear all stored attendance records.

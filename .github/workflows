@@ -9,13 +9,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1, 8.2, 8.3]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0' # adjust to your PHP version
+          php-version: ${{ matrix.php }}
+          extensions: sockets
       - name: Install dependencies
-        run: composer install
-      - name: Run tests
-        run: vendor/bin/phpunit
+        run: composer install --no-interaction --prefer-dist
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --coverage-text
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse src tests --level max
+      - name: Run PHP CS Fixer (dry run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - name: Composer audit
+        run: composer audit --no-interaction
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ matrix.php }}
+          path: coverage
+
