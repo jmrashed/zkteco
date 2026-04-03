@@ -245,8 +245,11 @@ class Fingerprint
         $byte1 = chr($uid % 256);
         $byte2 = chr($uid >> 8);
         
-        $formattedData = chr($templateSize % 256) . chr($templateSize >> 8) . 
-                        $byte1 . $byte2 . chr($fingerId) . chr(1) . $templateData;
+        if ($possibleUid >= 0 && $possibleFingerId >=0 && $possibleSize === strlen($templateData) - 6) {
+            $templateData = substr($templateData, 6);
+        }
+        $formattedData = chr($templateSize % 256) . chr($templateSize >> 8) .
+                 $byte1 . $byte2 . chr($fingerId) . chr(1) . $templateData;
         
         return $fingerprint->_setFinger($self, $formattedData);
     }

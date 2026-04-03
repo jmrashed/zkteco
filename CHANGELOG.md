@@ -1,6 +1,28 @@
 # Change log
 All notable changes to `jmrashed/zkteco` will be documented in this file
 
+## Version 1.3.3 at 3 April 2026
+### What's Changed
+#### Dependency Updates
+- **UPGRADED**: orchestra/testbench from ^7.0 to ^9.0 for Laravel 11 compatibility
+- **UPGRADED**: Updated all dependencies to latest stable versions
+- **SECURITY**: Resolved security advisories in Laravel framework dependencies
+
+#### Bug Fixes
+- **FIXED**: Fingerprint template data handling to avoid double header issues during enrollment
+
+#### Improvements
+- **IMPROVED**: Compatibility with PHP 8.3
+- **IMPROVED**: Better composer dependency resolution
+
+## Version 1.3.2 at 31 March 2026
+### What's Changed
+- **FIXED**: Minor release fixes and improvements
+
+## Version 1.3.1 at 31 March 2026
+### What's Changed
+- **FIXED**: Minor release fixes and improvements
+
 ## Version 1.3.0 at 5 October 2025
 ### What's Changed
 #### Bug Fixes
