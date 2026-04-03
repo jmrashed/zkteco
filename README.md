@@ -13,6 +13,7 @@
 
 
 
+> **⚠️ Version 2.0.0 Notice**: This major release includes breaking changes with a complete architectural refactor. See [CHANGELOG](CHANGELOG.md) for migration guide.
 
 This Laravel package provides convenient functions for interacting with ZKTeco devices, allowing seamless communication with attendance devices (such as fingerprint, face recognition, or RFID) using UDP protocol. It simplifies the process of reading and writing data directly to these devices from a web server without the need for additional programs.
 

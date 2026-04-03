@@ -1,6 +1,47 @@
 # Change log
 All notable changes to `jmrashed/zkteco` will be documented in this file
 
+## Version 2.0.0 at 3 April 2026
+### What's Changed
+#### 🚀 Major Architecture Refactor (Breaking Changes)
+- **REFACTORED**: Complete architectural overhaul with dependency injection and focused facades
+- **BREAKING**: Replaced monolithic ZKTeco class with specialized facades (Users, Attendance, Biometrics, Device, Security, Time)
+- **BREAKING**: Introduced exception-based error handling instead of mixed return types
+- **BREAKING**: Added comprehensive input validation and type safety
+
+#### ✨ New Features
+- **NEW**: Real-time event monitoring with callback system
+- **NEW**: Door control functions (open, close, lock, unlock) with status monitoring
+- **NEW**: Custom LCD message display with duration control
+- **NEW**: Time zone synchronization
+- **NEW**: Advanced user role management with granular permissions
+- **NEW**: Batch operations support for improved performance
+- **NEW**: Connection pooling and retry mechanisms
+
+#### 🔧 Technical Improvements
+- **IMPROVED**: Exception-based error handling with custom exception classes
+- **IMPROVED**: Comprehensive input validation and security hardening
+- **IMPROVED**: Type hints and return types throughout the codebase
+- **IMPROVED**: Code duplication elimination with shared base classes
+- **IMPROVED**: Performance optimizations with connection resilience
+- **IMPROVED**: Better separation of concerns and SOLID principles compliance
+
+#### 🧪 Quality Assurance
+- **ADDED**: Comprehensive test suite with 80%+ coverage
+- **ADDED**: Integration tests with Docker-based testing environment
+- **ADDED**: CI/CD pipeline with automated quality checks
+- **ADDED**: Performance benchmarks and security auditing
+
+#### 📚 Documentation
+- **UPDATED**: Complete API documentation with PHPDoc
+- **UPDATED**: README with API reference and usage examples
+- **ADDED**: Troubleshooting guide and performance tuning tips
+
+#### 🔒 Security Enhancements
+- **SECURITY**: Input validation to prevent injection attacks
+- **SECURITY**: Secure defaults and configuration validation
+- **SECURITY**: Audit logging for security events
+
 ## Version 1.3.3 at 3 April 2026
 ### What's Changed
 #### Dependency Updates
