@@ -131,10 +131,10 @@ class Fingerprint
      */
     private function _setFinger(ZKTeco $self, $data)
     {
-        $command = Util::CMD_USER_TEMP_WRQ;
-        $command_string = $data;
-
-        return $self->_command($command, $command_string);
+        // Fingerprint templates (commonly 500-1500+ bytes) exceed a single
+        // UDP packet, so use the chunked buffer protocol instead of sending
+        // the whole template in one CMD_USER_TEMP_WRQ packet.
+        return Util::sendWithBuffer($self, Util::CMD_USER_TEMP_WRQ, $data);
     }
 
     /**
