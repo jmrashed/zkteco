@@ -521,6 +521,20 @@ class ZKTeco
         return Attendance::getByDateRange($this, $start, $end);
     }
 
+/**
+ * Fetch attendance records, discarding ones that fail basic sanity checks
+ * (uid 0, non-printable badge id, out-of-range state/type, implausible
+ * timestamp). Mitigates corrupted entries reported on some devices
+ * (see #7 / #12) - it does not fix the underlying record-format mismatch,
+ * which needs a raw device packet capture to resolve properly.
+ *
+ * @return array
+ */
+    public function getSanitizedAttendance()
+    {
+        return Attendance::getSanitized($this);
+    }
+
     public function getTodaysRecords()
     {
         // Get all attendance records from the device
