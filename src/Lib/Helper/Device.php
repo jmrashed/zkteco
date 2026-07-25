@@ -351,17 +351,20 @@ class Device
         }
         
         $startTime = time();
-        
+
         while ($timeout === 0 || (time() - $startTime) < $timeout) {
-            $events = self::_pollEvents($self, 5);
-            
+            // Poll in short slices so the outer $timeout is actually
+            // respected instead of blocking a fixed 5s per iteration
+            // regardless of how much time is left.
+            $events = self::_pollEvents($self, 1);
+
             foreach ($events as $event) {
                 call_user_func($callback, $event);
             }
-            
+
             usleep(100000); // 100ms delay
         }
-        
+
         return true;
     }
 
