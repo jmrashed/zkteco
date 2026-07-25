@@ -498,6 +498,23 @@ class ZKTeco
         return Attendance::get($this, $limit);
     }
 
+/**
+ * Fetch attendance records within a date/time range (inclusive).
+ *
+ * NOTE: the device protocol has no server-side time-range query — this
+ * still downloads the full attendance log and filters client-side. It
+ * won't make fetching faster, but avoids every caller re-implementing
+ * the same date filtering loop.
+ *
+ * @param string $start Start of range, "Y-m-d H:i:s" or "Y-m-d".
+ * @param string $end End of range, "Y-m-d H:i:s" or "Y-m-d".
+ * @return array
+ */
+    public function getAttendanceByDateRange($start, $end)
+    {
+        return Attendance::getByDateRange($this, $start, $end);
+    }
+
     public function getTodaysRecords()
     {
         // Get all attendance records from the device
