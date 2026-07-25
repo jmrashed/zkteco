@@ -430,10 +430,10 @@ class ZKTeco
         return Attendance::get($this, $limit);
     }
 
-    public static function getTodaysRecords(ZKTeco $self)
+    public function getTodaysRecords()
     {
         // Get all attendance records from the device
-        $attendanceData = self::get($self);
+        $attendanceData = $this->getAttendance();
 
         // Get today's date
         $currentDate = date('Y-m-d');
