@@ -12,6 +12,9 @@ class Attendance
    * This method retrieves attendance records from the connected ZKTeco device.
    *
    * @param ZKTeco $self An instance of the ZKTeco class.
+   * @param int|null $limit If set, only the $limit most recent records are returned.
+   *                        The device protocol always transfers the full log first;
+   *                        this only reduces what's parsed/returned client-side.
    * @return array An array of attendance records. Each record contains the following keys:
    *               - uid: User ID
    *               - id: Badge ID (binary)
@@ -19,7 +22,7 @@ class Attendance
    *               - timestamp: Timestamp of the attendance record
    *               - type: Attendance type (might be device specific)
    */
-  static public function get(ZKTeco $self)
+  static public function get(ZKTeco $self, $limit = null)
   {
     $self->_section = __METHOD__; // Set the current section for internal tracking (optional)
 
@@ -65,7 +68,36 @@ class Attendance
       }
     }
 
+    if ($limit !== null && $limit >= 0) {
+      $attendance = array_slice($attendance, -$limit);
+    }
+
     return $attendance; // Return the parsed attendance data
+  }
+
+  /**
+   * Fetch attendance data within a date/time range (inclusive).
+   *
+   * The device protocol has no server-side time-range query, so this still
+   * downloads the full attendance log and filters client-side; it's an
+   * ergonomics helper, not a performance optimization.
+   *
+   * @param ZKTeco $self
+   * @param string $start Start of range, "Y-m-d H:i:s" or "Y-m-d".
+   * @param string $end End of range, "Y-m-d H:i:s" or "Y-m-d".
+   * @return array
+   */
+  static public function getByDateRange(ZKTeco $self, $start, $end)
+  {
+    $startTs = strtotime($start);
+    $endTs = strtotime($end);
+
+    $attendance = self::get($self);
+
+    return array_values(array_filter($attendance, function ($record) use ($startTs, $endTs) {
+      $ts = strtotime($record['timestamp']);
+      return $ts >= $startTs && $ts <= $endTs;
+    }));
   }
 
   /**

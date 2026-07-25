@@ -404,10 +404,19 @@ $attendanceLog = $zk->getTodaysRecords();
 ### 24.3 Get Latest Attendance with Limit
 ```php
 // Get the 5 latest attendance records
-$latestAttendance = $zk->getAttendance(5);
+$latestAttendance = $zk->getAttendanceWithLimit(5);
 ```
+Note: the device protocol always transfers the entire attendance log first — this only limits what's returned client-side after that transfer, it doesn't make fetching faster.
 
-## 24.4 Clear Attendance Log
+### 24.4 Get Attendance Within A Date/Time Range
+```php
+// Get attendance records between two dates/times (inclusive)
+// Accepts "Y-m-d H:i:s" or "Y-m-d"
+$rangeAttendance = $zk->getAttendanceByDateRange('2024-01-01', '2024-01-31 23:59:59');
+```
+Like the limit above, the device has no server-side time-range query, so this still downloads the full log and filters client-side — it's an ergonomics helper to avoid re-implementing the same date filtering loop in every project, not a way to speed up slow fetches from large logs.
+
+## 24.5 Clear Attendance Log
 ```php
 // Clear the attendance log from the ZKTeco device
 // Returns a boolean or mixed value indicating whether the attendance log was successfully cleared
