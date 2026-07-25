@@ -626,6 +626,24 @@ $result = $zk->syncTimeZone('Europe/London');
 $result = $zk->syncTimeZone('Asia/Tokyo');
 ```
 
+## 35.3 User Groups
+
+Assign users to a group, and assign up to 3 time zones to a group. **Note:** unlike most methods in this library, this record layout hasn't been verified against a physical device capture — please report back if it doesn't behave as expected for your device.
+
+```php
+// Assign user with uid 1 to group 5
+$zk->setUserGroup(1, 5);
+
+// Get the group a user is assigned to
+$groupId = $zk->getUserGroup(1);
+
+// Assign up to 3 time zone IDs to group 5
+$zk->setGroupTimezones(5, [1, 2]);
+
+// Get the time zone IDs assigned to group 5
+$timezones = $zk->getGroupTimezones(5);
+```
+
 ## 36. Real-time Event Monitoring
 
 ### 36.1 Get Real-time Events
