@@ -101,6 +101,63 @@ class Attendance
   }
 
   /**
+   * Fetch attendance data, discarding records that are clearly corrupted.
+   *
+   * Some devices (reported for SpeedFace-V5L, see issues #7 / #12) return
+   * attendance records where only the first entry decodes correctly and
+   * later entries contain obviously-invalid data (uid 0, non-printable
+   * badge ids, out-of-range state/type, sentinel/garbage timestamps). This
+   * is a real record-format mismatch that needs a raw device packet
+   * capture to fix properly (the parsing offsets here match the iClock 680
+   * format, which is a different/older record layout) - this method is a
+   * best-effort mitigation that filters out records failing basic sanity
+   * checks, not a fix for the underlying format difference. It's opt-in
+   * (not the default from get()) so it can't silently drop legitimate
+   * records for devices that already parse correctly.
+   *
+   * @param ZKTeco $self
+   * @return array
+   */
+  static public function getSanitized(ZKTeco $self)
+  {
+    $attendance = self::get($self);
+
+    return array_values(array_filter($attendance, [self::class, 'isPlausibleRecord']));
+  }
+
+  /**
+   * @param array $record
+   * @return bool
+   */
+  private static function isPlausibleRecord(array $record)
+  {
+    if (empty($record['uid'])) {
+      return false;
+    }
+
+    if (isset($record['id']) && $record['id'] !== '' && !ctype_print($record['id'])) {
+      return false;
+    }
+
+    if (isset($record['state']) && ($record['state'] < 0 || $record['state'] > 15)) {
+      return false;
+    }
+
+    if (isset($record['type']) && ($record['type'] < 0 || $record['type'] > 15)) {
+      return false;
+    }
+
+    if (isset($record['timestamp'])) {
+      $ts = strtotime($record['timestamp']);
+      if ($ts === false || $ts < strtotime('2000-01-02') || $ts > strtotime('+2 years')) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * Fetch attendance data and merge with user details.
    *
    * @param ZKTeco $self

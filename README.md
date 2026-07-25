@@ -416,6 +416,19 @@ $rangeAttendance = $zk->getAttendanceByDateRange('2024-01-01', '2024-01-31 23:59
 ```
 Like the limit above, the device has no server-side time-range query, so this still downloads the full log and filters client-side — it's an ergonomics helper to avoid re-implementing the same date filtering loop in every project, not a way to speed up slow fetches from large logs.
 
+### 24.4a Sanitized Attendance Log (corrupted-record mitigation)
+
+Some devices (reported for the SpeedFace-V5L, see issues #7 / #12) return attendance records where only the first entry decodes correctly — later entries can contain `uid = 0`, non-printable badge ids, out-of-range state/type values, or garbage timestamps. This is a genuine record-format mismatch (the parsing in this library matches the iClock 680 layout, and some newer devices apparently use a different one) that needs a raw device packet capture to fix properly.
+
+As a best-effort mitigation, `getSanitizedAttendance()` filters out records that fail basic sanity checks:
+
+```php
+// Same as getAttendance(), but drops records that are clearly corrupted
+$attendanceLog = $zk->getSanitizedAttendance();
+```
+
+This is opt-in (not the default `getAttendance()` behavior) so it can't silently drop legitimate records on devices that already parse correctly. If you're affected by this and can share a raw packet capture, please comment on #7 or #12.
+
 ## 24.5 Clear Attendance Log
 ```php
 // Clear the attendance log from the ZKTeco device
