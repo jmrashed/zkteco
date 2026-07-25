@@ -307,6 +307,27 @@ class ZKTeco
     }
 
 /**
+ * Updates an existing user's data in place, without deleting and recreating them.
+ *
+ * The device's "set user" command upserts by $uid: sending it again for a $uid
+ * that already exists overwrites that user's fields (including $userid,
+ * name, password, role, and card number) rather than creating a duplicate.
+ * This is an alias of setUser() for discoverability when updating.
+ *
+ * @param int $uid Unique ID (max 65535) of the existing user to update.
+ * @param int|string $userid New badge/user ID (max length = 9).
+ * @param string $name New name (max length = 24).
+ * @param int|string $password New password (max length = 8).
+ * @param int $role Default Util::LEVEL_USER.
+ * @param int $cardno Default 0 (max length = 10).
+ * @return bool|mixed True if the user was successfully updated, otherwise returns the result from User::set.
+ */
+    public function updateUser($uid, $userid, $name, $password, $role = Util::LEVEL_USER, $cardno = 0)
+    {
+        return User::set($this, $uid, $userid, $name, $password, $role, $cardno);
+    }
+
+/**
  * Removes all users from the device.
  *
  * @return bool|mixed True if all users were successfully removed, otherwise returns the result from User::clear.
