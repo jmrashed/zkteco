@@ -74,8 +74,14 @@ class ZKTeco
         $chksum = 0;
         $session_id = $this->_session_id;
 
-        $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6/H2h7/H2h8', substr($this->_data_recv, 0, 8));
-        $reply_id = hexdec($u['h8'] . $u['h7']);
+        // _data_recv can be shorter than 8 bytes (or empty) if a previous
+        // command/connect attempt failed or never received a reply; unpack()
+        // would otherwise emit "not enough input" warnings.
+        $reply_id = 0;
+        if (strlen($this->_data_recv) >= 8) {
+            $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6/H2h7/H2h8', substr($this->_data_recv, 0, 8));
+            $reply_id = hexdec($u['h8'] . $u['h7']);
+        }
 
         $buf = Util::createHeader($command, $chksum, $session_id, $reply_id, $command_string);
 
