@@ -1,6 +1,24 @@
 # Change log
 All notable changes to `jmrashed/zkteco` will be documented in this file
 
+## Version 2.1.0 at 25 July 2026
+### What's Changed
+#### 🐛 Bug Fixes
+- **FIXED**: `getTodaysRecords()` threw a fatal error when called as documented (`$zk->getTodaysRecords()`) due to a static/instance method mismatch (#3)
+- **FIXED**: `setFingerprint()` / `enrollFingerprint()` failed on real fingerprint templates because the library sent the whole template in a single UDP packet instead of using the device's chunked `CMD_PREPARE_DATA`/`CMD_DATA` buffer protocol (#6, #11)
+- **FIXED**: `getAttendanceWithLimit($limit)` silently ignored the `$limit` argument and always returned the full log (#5)
+- **FIXED**: `unpack(): Type H: not enough input` warnings/errors when a socket response was short or empty, e.g. after a failed `connect()` (#2)
+
+#### ✨ New Features
+- **NEW**: `updateUser()` for editing an existing user's userid/name/password/role/cardno in place, without deleting and recreating them (#14)
+- **NEW**: User group management — `setUserGroup()`, `getUserGroup()`, `setGroupTimezones()`, `getGroupTimezones()` (#15)
+- **NEW**: `getAttendanceByDateRange($start, $end)` for client-side date/time range filtering of attendance logs (#5)
+- **NEW**: `getSanitizedAttendance()` — opt-in filtering of attendance records that fail basic sanity checks, mitigating corrupted entries reported on some devices (#7, #12)
+
+#### 📚 Documentation
+- **DOCUMENTED**: `getAttendanceWithUser()`, which merges attendance logs with the matching user's name/role/cardno (#13)
+- **DOCUMENTED**: user update flow, user group usage, attendance limit/range/sanitization helpers, and known device-specific parsing caveats
+
 ## Version 2.0.0 at 3 April 2026
 ### What's Changed
 #### 🚀 Major Architecture Refactor (Breaking Changes)
