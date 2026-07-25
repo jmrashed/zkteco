@@ -37,6 +37,8 @@ class Util
   const CMD_DATA = 1501; # Transmit a data packet
   const CMD_FREE_DATA = 1502; # Clear machines open buffer
 
+  const MAX_CHUNK_SIZE = 1024; # Max bytes per CMD_DATA packet when buffering a large upload
+
   const CMD_USER_TEMP_RRQ = 9; # Read some fingerprint template or some kind of data entirely
   const CMD_ATT_LOG_RRQ = 13; # Read all attendance record
   const CMD_CLEAR_DATA = 14; # Clear Data
@@ -407,6 +409,39 @@ class Util
     }
 
     return $data;
+  }
+
+  /**
+   * Send a payload to the device, transparently using the chunked
+   * CMD_PREPARE_DATA/CMD_DATA buffer protocol when the payload is too
+   * large to fit in a single packet (e.g. fingerprint templates, which
+   * are commonly 500-1500+ bytes). Small payloads are sent directly with
+   * $command, unchanged from the previous behavior.
+   *
+   * @param ZKTeco $self
+   * @param int $command Final command to issue once the buffer is uploaded (e.g. CMD_USER_TEMP_WRQ)
+   * @param string $data Raw payload to send
+   * @return bool|mixed Result of the final command, or false if any step fails
+   */
+  static public function sendWithBuffer(ZKTeco $self, $command, $data)
+  {
+    if (strlen($data) <= self::MAX_CHUNK_SIZE) {
+      return $self->_command($command, $data);
+    }
+
+    $prepared = $self->_command(self::CMD_PREPARE_DATA, pack('V', strlen($data)));
+    if ($prepared === false) {
+      return false;
+    }
+
+    foreach (str_split($data, self::MAX_CHUNK_SIZE) as $chunk) {
+      $sent = $self->_command(self::CMD_DATA, $chunk);
+      if ($sent === false) {
+        return false;
+      }
+    }
+
+    return $self->_command($command, '');
   }
 
   /**
