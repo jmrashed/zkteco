@@ -9,6 +9,7 @@ use Jmrashed\Zkteco\Lib\Helper\Connect;
 use Jmrashed\Zkteco\Lib\Helper\Device;
 use Jmrashed\Zkteco\Lib\Helper\EventMonitor;
 use Jmrashed\Zkteco\Lib\Helper\Face;
+use Jmrashed\Zkteco\Lib\Helper\Group;
 use Jmrashed\Zkteco\Lib\Helper\Fingerprint;
 use Jmrashed\Zkteco\Lib\Helper\Os;
 use Jmrashed\Zkteco\Lib\Helper\Pin;
@@ -325,6 +326,52 @@ class ZKTeco
     public function updateUser($uid, $userid, $name, $password, $role = Util::LEVEL_USER, $cardno = 0)
     {
         return User::set($this, $uid, $userid, $name, $password, $role, $cardno);
+    }
+
+/**
+ * Assigns a user to a group.
+ *
+ * @param int $uid Unique ID (max 65535) of the user.
+ * @param int $groupId Group ID (max 255).
+ * @return bool|mixed
+ */
+    public function setUserGroup($uid, $groupId)
+    {
+        return Group::setUserGroup($this, $uid, $groupId);
+    }
+
+/**
+ * Gets the group ID a user is assigned to.
+ *
+ * @param int $uid Unique ID (max 65535) of the user.
+ * @return int|false Group ID, or false on failure.
+ */
+    public function getUserGroup($uid)
+    {
+        return Group::getUserGroup($this, $uid);
+    }
+
+/**
+ * Assigns up to 3 time zones to a group.
+ *
+ * @param int $groupId Group ID (max 255).
+ * @param array $timezoneIds Up to 3 time zone IDs.
+ * @return bool|mixed
+ */
+    public function setGroupTimezones($groupId, array $timezoneIds)
+    {
+        return Group::setGroupTimezones($this, $groupId, $timezoneIds);
+    }
+
+/**
+ * Gets the time zones assigned to a group.
+ *
+ * @param int $groupId Group ID (max 255).
+ * @return array Up to 3 time zone IDs, or an empty array on failure.
+ */
+    public function getGroupTimezones($groupId)
+    {
+        return Group::getGroupTimezones($this, $groupId);
     }
 
 /**

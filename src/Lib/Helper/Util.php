@@ -56,6 +56,11 @@ class Util
   const CMD_DELETE_USER_TEMP = 19; # Delete some fingerprint template
   const CMD_CLEAR_ADMIN = 20; # Cancel the manager
 
+  const CMD_USERGRP_RRQ = 21; # Read a user group's data
+  const CMD_USERGRP_WRQ = 22; # Upload a user group's data (assign a user to a group)
+  const CMD_GRPTZ_RRQ = 25; # Read a group's time zone assignments
+  const CMD_GRPTZ_WRQ = 26; # Upload a group's time zone assignments
+
   const LEVEL_USER = 0; # User level as User
   const LEVEL_ADMIN = 14; # User level as Admin
 
