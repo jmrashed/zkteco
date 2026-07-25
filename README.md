@@ -283,6 +283,15 @@ $users = $zk->getUser();
 $setUserResult = $zk->setUser($uid, $userid, $name, $password, $role, $cardno);
 ```
 
+## 19.1 Update An Existing User
+
+To edit a user's userid, name, password, role, or card number without deleting them first, call `updateUser()` (or `setUser()` — they're the same operation) with their existing `$uid`. The device's set-user command overwrites the record for that `$uid` in place:
+
+```php
+// $uid must match the existing user's uid (from getUser()) to update rather than create
+$updated = $zk->updateUser($uid, $newUserid, $newName, $newPassword, $role, $cardno);
+```
+
 ## 20. Clear All Admin
 ```php
 // Remove all admin users from the ZKTeco device
