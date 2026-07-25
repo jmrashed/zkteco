@@ -12,7 +12,17 @@ class AdvancedDeviceManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->zk = $this->createMock(ZKTeco::class);
+        // createMock() replaces every public method with a stub returning
+        // null by default, including the very methods under test here - so
+        // it must only replace _command() (the low-level socket call),
+        // letting the real business logic in ZKTeco/Device run. The real
+        // constructor is kept (not disabled) so $_zkclient is a real local
+        // UDP socket, since a couple of methods below poll it directly via
+        // Util/Device internals rather than going through _command().
+        $this->zk = $this->getMockBuilder(ZKTeco::class)
+            ->setConstructorArgs(['127.0.0.1'])
+            ->onlyMethods(['_command'])
+            ->getMock();
     }
 
     public function testDisplayCustomMessage()
@@ -101,19 +111,21 @@ class AdvancedDeviceManagementTest extends TestCase
 
     public function testSyncTimeZoneDefault()
     {
-        $this->zk->method('setTime')->willReturn(true);
-        
+        // syncTimeZone() goes through Time::set() -> _command() directly,
+        // not through the ZKTeco::setTime() wrapper.
+        $this->zk->method('_command')->willReturn(true);
+
         $result = $this->zk->syncTimeZone();
-        
+
         $this->assertTrue($result);
     }
 
     public function testSyncTimeZoneCustom()
     {
-        $this->zk->method('setTime')->willReturn(true);
-        
+        $this->zk->method('_command')->willReturn(true);
+
         $result = $this->zk->syncTimeZone('America/New_York');
-        
+
         $this->assertTrue($result);
     }
 
@@ -127,18 +139,20 @@ class AdvancedDeviceManagementTest extends TestCase
     public function testGetRealTimeEvents()
     {
         $this->zk->method('_command')->willReturn(true);
-        
-        $result = $this->zk->getRealTimeEvents(5);
-        
+
+        // Short timeout: this polls a real (but silent) local UDP socket for
+        // up to $timeout seconds, so keep it small to keep the test fast.
+        $result = $this->zk->getRealTimeEvents(1);
+
         $this->assertIsArray($result);
     }
 
     public function testGetRealTimeEventsFailure()
     {
         $this->zk->method('_command')->willReturn(false);
-        
-        $result = $this->zk->getRealTimeEvents(5);
-        
+
+        $result = $this->zk->getRealTimeEvents(1);
+
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
@@ -199,14 +213,14 @@ class AdvancedDeviceManagementTest extends TestCase
 
     public function testEventParsing()
     {
-        // Mock event data: 16 bytes with attendance event
+        // 16 bytes, matching Device::_parseEvent()'s expected layout exactly:
+        // byte 8 = type, bytes 9-10 = uid, bytes 11-14 = timestamp, byte 15 = state
         $eventData = str_repeat(chr(0), 8) . // Header
                     chr(1) . // Event type (attendance)
                     chr(123) . chr(0) . // UID (123)
                     chr(100) . chr(200) . chr(50) . chr(25) . // Timestamp
-                    chr(1) . // State
-                    chr(0); // Padding
-        
+                    chr(1); // State
+
         // This would be tested in integration tests with actual device
         $this->assertIsString($eventData);
         $this->assertEquals(16, strlen($eventData));
@@ -222,9 +236,16 @@ class AdvancedDeviceManagementTest extends TestCase
         ];
         
         foreach ($testCases as [$data, $expectedOpen, $expectedLocked, $expectedSensor, $expectedAlarm]) {
-            $this->zk->method('_command')->willReturn($data);
-            
-            $result = $this->zk->getDoorStatus(1);
+            // A fresh mock per case: configuring ->method() again on the
+            // same mock doesn't replace the first stub, it stacks another
+            // "any invocation" matcher that never gets reached.
+            $zk = $this->getMockBuilder(ZKTeco::class)
+                ->setConstructorArgs(['127.0.0.1'])
+                ->onlyMethods(['_command'])
+                ->getMock();
+            $zk->method('_command')->willReturn($data);
+
+            $result = $zk->getDoorStatus(1);
             
             $this->assertEquals($expectedOpen, $result['door_open']);
             $this->assertEquals($expectedLocked, $result['door_locked']);
