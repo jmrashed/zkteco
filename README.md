@@ -37,7 +37,8 @@ The `jmrashed/zkteco` package provides easy to use functions to ZKTeco Device ac
 
 ## Prerequisites
 
-- PHP installed on your system
+- PHP 8.1 - 8.5
+- Laravel 11, 12, or 13 (if used as a Laravel package; the core library itself has no Laravel dependency)
 - Access to the `Jmrashed\Zkteco\Lib\ZKTeco` class
 - Knowledge of the ZKTeco device IP address and port (if different from the default)
 
