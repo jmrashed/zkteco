@@ -86,8 +86,11 @@ class Connect
         $session_id = $self->_session_id;
 
         // Unpack the data received during connection to extract reply ID.
-        $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6/H2h7/H2h8', substr($self->_data_recv, 0, 8));
-        $reply_id = hexdec($u['h8'] . $u['h7']);
+        $reply_id = 0;
+        if (strlen($self->_data_recv) >= 8) {
+            $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6/H2h7/H2h8', substr($self->_data_recv, 0, 8));
+            $reply_id = hexdec($u['h8'] . $u['h7']);
+        }
 
         // Create the header for the command.
         $buf = Util::createHeader($command, $chksum, $session_id, $reply_id, $command_string);

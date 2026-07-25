@@ -182,10 +182,14 @@ class Util
    */
   static public function getSize(ZKTeco $self)
   {
+    if (strlen($self->_data_recv) < 8) {
+      return false;
+    }
+
     $u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6/H2h7/H2h8', substr($self->_data_recv, 0, 8));
     $command = hexdec($u['h2'] . $u['h1']);
 
-    if ($command == self::CMD_PREPARE_DATA) {
+    if ($command == self::CMD_PREPARE_DATA && strlen($self->_data_recv) >= 12) {
       $u = unpack('H2h1/H2h2/H2h3/H2h4', substr($self->_data_recv, 8, 4));
       $size = hexdec($u['h4'] . $u['h3'] . $u['h2'] . $u['h1']);
       return $size;
@@ -280,6 +284,10 @@ class Util
    */
   static public function checkValid($reply)
   {
+    if (strlen($reply) < 8) {
+      return false;
+    }
+
     $u = unpack('H2h1/H2h2', substr($reply, 0, 8));
 
     $command = hexdec($u['h2'] . $u['h1']);
