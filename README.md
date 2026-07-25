@@ -314,6 +314,36 @@ $removedUser = $zk->removeUser($uid);
 $attendanceLog = $zk->getAttendance();
 ```
 
+## 23.1 Get Attendance Log With User Details
+
+`getAttendance()` only returns the raw device fields (`uid`, `id`, `state`, `timestamp`, `type`) since that's all the device sends. To also get the matching user's name/userid/role/cardno (and human-readable state/type labels), use `getAttendanceWithUser()`, which fetches the user list once and merges it in:
+
+```php
+$attendanceLog = $zk->getAttendanceWithUser();
+```
+
+Sample response:
+```php
+array (
+  'uid' => 33,
+  'id' => '108',
+  'state' => 1,
+  'timestamp' => '2024-04-24 18:13:47',
+  'type' => 1,
+  'user' => [
+    'uid' => 33,
+    'userid' => '108',
+    'name' => 'John Doe',
+    'role' => 0,
+    'cardno' => '1234567890',
+  ],
+  'state_name' => 'Fingerprint',
+  'type_name' => '1',
+)
+```
+
+If no matching user is found for a record's `uid`, `user` will be `null`.
+
 ## 24. Get Todays Attendance Log
 
 ### 24.1 getTodaysRecords()
