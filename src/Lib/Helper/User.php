@@ -79,7 +79,7 @@ class User
                 $u1 = hexdec(substr($u[1], 2, 2));
                 $u2 = hexdec(substr($u[1], 4, 2));
                 $uid = $u1 + ($u2 * 256);
-                $cardno = hexdec(substr($u[1], 78, 2) . substr($u[1], 76, 2) . substr($u[1], 74, 2) . substr($u[1], 72, 2)) . ' ';
+                $cardno = hexdec(substr($u[1], 78, 2) . substr($u[1], 76, 2) . substr($u[1], 74, 2) . substr($u[1], 72, 2));
                 $role = hexdec(substr($u[1], 6, 2)) . ' ';
                 $password = hex2bin(substr($u[1], 8, 16)) . ' ';
                 $name = hex2bin(substr($u[1], 24, 74)) . ' ';
@@ -92,7 +92,7 @@ class User
                 $userid = $userid[0];
                 $name = explode(chr(0), $name, 3);
                 $name = utf8_encode($name[0]);
-                $cardno = str_pad($cardno, 11, '0', STR_PAD_LEFT);
+                $cardno = str_pad((string) $cardno, 10, '0', STR_PAD_LEFT);
 
                 if ($name == '') {
                     $name = $userid;
